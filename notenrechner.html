@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notenrechner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b4c79f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .container input:hover {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+        .container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .container button:hover {
+            background-color: #45a049;
+            box-shadow: 0 0 5px rgba(69, 160, 73, 0.5);
+        }
+        .credits {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="number" name="erhaltene_punkte" id="received_points" placeholder="Deine Punkteanzahl"> <br>
+        <input type="number" name="maximale_punkte" id="max_points" placeholder="Maximale Punkteanzahl"> <br>
+        <input type="text" disabled="true" id="grade" placeholder="Deine Note"> <br>
+        <button type="submit" onclick="show_grade()">Berechne deine Note</button>
+    </div>
+    <div class="credits">
+        Website: Robin Meier <br>
+        Design: Yannick Deuber
+    </div>
+    <script>
+        function show_grade() {
+            let received_points = document.getElementById("received_points").value;
+            let max_points = document.getElementById("max_points").value;
+            let grade = document.getElementById("grade");
+
+            var grade_raw = (received_points * 5) / max_points + 1;
+            grade.value = grade_raw.toFixed(2);
+        }
+    </script>
+</body>
+</html>
