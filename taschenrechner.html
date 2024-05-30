@@ -5,31 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taschenrechner</title>
     <style>
-        .calculator {
-            max-width: 200px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: 'Roboto', sans-serif;
         }
+
+        .calculator {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            width: 100%;
+        }
+
         .display {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
             text-align: right;
-            border: 1px solid #ccc;
+            border: none;
+            background: #f3f3f3;
+            border-radius: 5px;
+            font-size: 2rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
+            gap: 10px;
         }
+
         .button {
             padding: 20px;
-            border: 1px solid #ccc;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
             text-align: center;
+            font-size: 1.2rem;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .button:hover {
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .button:nth-child(4n+4) {
+            background: #4facfe;
+            color: #fff;
+        }
+
+        .button:nth-child(4n+4):hover {
+            background: #3a8dde;
+        }
+
+        .button:nth-child(4n+4):active {
+            background: #3179b5;
+        }
+
+        .button:not(:nth-child(4n+4)) {
+            background: #f3f3f3;
+        }
+
+        .button:nth-last-child(3) {
+            background: #ffeb3b;
+        }
+
+        .button:nth-last-child(3):hover {
+            background: #ffdd00;
+        }
+
+        .button:nth-last-child(3):active {
+            background: #ffcc00;
+        }
+
+        .button:nth-last-child(2) {
+            background: #ff5252;
+            color: #fff;
+        }
+
+        .button:nth-last-child(2):hover {
+            background: #ff1744;
+        }
+
+        .button:nth-last-child(2):active {
+            background: #d50000;
+        }
+
+        .button:nth-last-child(1) {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .button:nth-last-child(1):hover {
+            background: #43a047;
+        }
+
+        .button:nth-last-child(1):active {
+            background: #388e3c;
+        }
+
     </style>
 </head>
 <body>
