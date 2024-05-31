@@ -61,6 +61,13 @@
         <button onclick="generate_password()">Generieren</button>
     </div>
     <script>
+        document.getElementById('password_length').addEventListener('input', function() {
+            let value = parseInt(this.value, 10);
+            if (value > 30000000) {
+                this.value = 30000000;
+            }
+        });
+        
         function generate_password(){
             var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,?!:;<>&@#_';
             var password = ''
