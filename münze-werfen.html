@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Münze werfen</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 50px; 
+            background-color: #e0f7fa; 
+            color: #0277bd; 
+        }
+        h1 { 
+            font-size: 36px; 
+            color: #01579b; 
+        }
+        button { 
+            padding: 10px 20px; 
+            font-size: 16px; 
+            background-color: #0288d1; 
+            color: #fff; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        button:hover { 
+            background-color: #0277bd; 
+        }
+        .result { 
+            font-size: 24px; 
+            margin-top: 20px; 
+            padding: 20px; 
+            border-radius: 5px; 
+            background-color: #b3e5fc; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Münze werfen</h1>
+    <button onclick="flipCoin()">Münze werfen</button>
+    <div class="result" id="result">Ergebnis: </div>
+
+    <script>
+        function flipCoin() {
+            const result = Math.random() < 0.5 ? 'Kopf' : 'Zahl';
+            document.getElementById('result').innerText = 'Ergebnis: ' + result;
+        }
+    </script>
+</body>
+</html>
