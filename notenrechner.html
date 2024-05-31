@@ -49,24 +49,15 @@
             background-color: #45a049;
             box-shadow: 0 0 5px rgba(69, 160, 73, 0.5);
         }
-        .credits {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #000000;
-        }
+        
     </style>
 </head>
 <body>
     <div class="container">
         <input type="number" name="erhaltene_punkte" id="received_points" placeholder="Deine Punkteanzahl"> <br>
         <input type="number" name="maximale_punkte" id="max_points" placeholder="Maximale Punkteanzahl"> <br>
-        <input type="text" id="grade" placeholder="Deine Note"> <br>
+        <input type="text" disabled="true" id="grade" placeholder="Deine Note"> <br>
         <button type="submit" onclick="show_grade()">Berechne deine Note</button>
-    </div>
-    <div class="credits">
-        Website: Robin Meier <br>
-        Design: Yannick Deuber
     </div>
     <script>
         function show_grade() {
