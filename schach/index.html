@@ -1,0 +1,94 @@
+<html lang="de">
+<head>    
+    
+    <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="js/chessboard-1.0.0.min.js"></script>
+    <script src="js/chess.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schach</title>
+</head>
+<body>
+    <div id="board1" style="width: 400px"></div>
+    <label>Status:</label>
+    <div id="status"></div>
+    <label hidden>FEN:</label>
+    <div id="fen"></div>
+    <label>PGN:</label>
+    <div id="pgn"></div>
+        
+</body>
+</html>
+<script>
+
+    var config = {
+    position: 'start',
+    draggable: true
+    }
+
+    var board1 = ChessBoard('board1', config);
+
+    var game = new Chess(); 
+
+    var onDragStart = function (source, piece, position, orientation) {
+        if (game.in_checkmate() === true || game.in_draw() === true ||
+            (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+            return false;
+        }
+    };
+
+    var onDrop = function (source, target) {
+        var move = game.move({
+            from: source,
+            to: target,
+            promotion: 'q' 
+        });
+
+        if (move === null) return 'snapback';
+
+        updateStatus();
+    };
+
+    var updateStatus = function () {
+        var status = '';
+
+        var moveColor = 'Weiß';
+        if (game.turn() === 'b') {
+            moveColor = 'Schwarz';
+        }
+
+        if (game.in_checkmate() === true) {
+            status = 'Spiel beendet, ' + moveColor + ' ist schachmatt.';
+        }
+
+        else if (game.in_draw() === true) {
+            status = 'Spiel beendet, Unentschieden.';
+        }
+
+        else {
+            status = moveColor + ' am Zug';
+
+            if (game.in_check() === true) {
+                status += ', ' + moveColor + ' steht im Schach';
+            }
+        }
+
+        $('#status').html(status);
+        //$('#fen').html(game.fen());
+        $('#pgn').html(game.pgn());
+    };
+
+    var config = {
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart, 
+        onDrop: onDrop, 
+    };
+
+    var board1 = ChessBoard('board1', config); 
+    updateStatus();
+</script>
+
