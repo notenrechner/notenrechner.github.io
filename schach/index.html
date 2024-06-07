@@ -11,23 +11,50 @@
     <title>Schach</title>
 </head>
 <style>
-html {
-  overflow: hidden;
-  overscroll-behavior: none;
-}
-</style>
+    html {
+      overflow: hidden;
+      overscroll-behavior: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;      
+    }
+
+    #status{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>
 <body>
-    <div id="board1" style="width: 400px"></div>
-    <label>Status:</label>
+    <div id="board1"></div>
+    <label hidden>Status:</label>
     <div id="status"></div>
     <label hidden>FEN:</label>
     <div id="fen"></div>
-    <label>PGN:</label>
-    <div id="pgn"></div>
+    <label hidden>PGN:</label>
+    <div id="pgn" hidden></div>
         
 </body>
 </html>
 <script>
+        function resizeContent() {
+            var viewportWidth = window.innerWidth;
+            var viewportHeight = window.innerHeight;
+            var boardElement = document.getElementById('board1');
+            
+            if (viewportWidth < viewportHeight) {
+                document.body.style.width = viewportWidth - 10 + 'px';
+                boardElement.style.width = viewportWidth - 10 + 'px';
+            } else {
+                document.body.style.width = viewportHeight + 'px';
+                boardElement.style.width = viewportHeight - 30 + 'px';
+            }
+        }
+
+        resizeContent();
+
+        window.addEventListener('resize', resizeContent);
+
 
     var config = {
     position: 'start',
