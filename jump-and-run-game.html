@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump-and-run</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background: #87CEEB; /* Himmelblau */
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #000;
+            display: none; /* Verstecke Score, bis das Spiel startet */
+        }
+        #menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: #87CEEB; /* Himmelblau */
+        }
+        .menu-button {
+            padding: 10px 20px;
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background: #000;
+            color: #fff;
+            border-radius: 5px;
+        }
+        #gameOverScreen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+        #gameOverText {
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        #gameOverButtons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .game-over-button {
+            padding: 10px 20px;
+            font-size: 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            background: #000;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <button class="menu-button" onclick="startGame('keyboard')">Mit Leertaste spielen</button>
+        <button class="menu-button" onclick="startGame('touch')">Mit Touchscreen spielen</button>
+    </div>
+    <canvas id="gameCanvas" style="display: none;"></canvas>
+    <div id="score">Score: 0</div>
+    <div id="gameOverScreen">
+        <div id="gameOverText">Game Over!</div>
+        <div id="gameOverButtons">
+            <button class="game-over-button" onclick="continueGame()">Weiterspielen</button>
+            <button class="game-over-button" onclick="showMenu()">Zum Menü</button>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let player = {
+            x: 50,
+            y: canvas.height - 150,
+            width: 50,
+            height: 50,
+            color: "red",
+            speed: 5,
+            dy: 0,
+            gravity: 0.8,
+            jumpPower: 15,
+            jumping: false
+        };
+
+        let obstacles = [];
+        let score = 0;
+        let frame = 0;
+        let controlType = 'keyboard'; // Standardsteuerung ist Tastatur
+        let gameRunning = false;
+
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = "green";
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+        }
+
+        function updateObstacles() {
+            if (frame % 90 === 0) {
+                let height = Math.random() * 50 + 50;
+                obstacles.push({
+                    x: canvas.width,
+                    y: canvas.height - height,
+                    width: 20,
+                    height: height
+                });
+            }
+            obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
+            obstacles.forEach(obstacle => obstacle.x -= player.speed);
+        }
+
+        function updatePlayer() {
+            if (player.jumping) {
+                player.dy = -player.jumpPower;
+                player.jumping = false;
+            }
+            player.dy += player.gravity;
+            player.y += player.dy;
+            if (player.y + player.height > canvas.height) {
+                player.y = canvas.height - player.height;
+                player.dy = 0;
+            }
+        }
+
+        function checkCollision() {
+            for (let obstacle of obstacles) {
+                if (player.x < obstacle.x + obstacle.width &&
+                    player.x + player.width > obstacle.x &&
+                    player.y < obstacle.y + obstacle.height &&
+                    player.y + player.height > obstacle.y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function updateScore() {
+            score++;
+            document.getElementById("score").innerText = "Score: " + score;
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawObstacles();
+            updateObstacles();
+            updatePlayer();
+            updateScore();
+
+            if (checkCollision()) {
+                endGame();
+            } else {
+                frame++;
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function handleJump() {
+            if (player.dy === 0) {
+                player.jumping = true;
+            }
+        }
+
+        function startGame(control) {
+            controlType = control;
+            document.getElementById("menu").style.display = "none";
+            canvas.style.display = "block";
+            document.getElementById("score").style.display = "block";
+            gameRunning = true;
+
+            player = {
+                x: 50,
+                y: canvas.height - 150,
+                width: 50,
+                height: 50,
+                color: "red",
+                speed: 5,
+                dy: 0,
+                gravity: 0.8,
+                jumpPower: 15,
+                jumping: false
+            };
+            obstacles = [];
+            score = 0;
+            frame = 0;
+
+            if (controlType === 'keyboard') {
+                document.addEventListener("keydown", function(e) {
+                    if (e.code === "Space") {
+                        handleJump();
+                    }
+                });
+            } else if (controlType === 'touch') {
+                document.addEventListener("touchstart", function(e) {
+                    handleJump();
+                });
+            }
+
+            gameLoop();
+        }
+
+        function endGame() {
+            gameRunning = false;
+            canvas.style.display = "none";
+            document.getElementById("score").style.display = "none";
+            document.getElementById("gameOverScreen").style.display = "flex";
+        }
+
+        function continueGame() {
+            document.getElementById("gameOverScreen").style.display = "none";
+            canvas.style.display = "block";
+            document.getElementById("score").style.display = "block";
+            gameRunning = true;
+            player = {
+                x: 50,
+                y: canvas.height - 150,
+                width: 50,
+                height: 50,
+                color: "red",
+                speed: 5,
+                dy: 0,
+                gravity: 0.8,
+                jumpPower: 15,
+                jumping: false
+            };
+            obstacles = [];
+            score = 0;
+            frame = 0;
+            gameLoop();
+        }
+
+        function showMenu() {
+            document.getElementById("gameOverScreen").style.display = "none";
+            document.getElementById("menu").style.display = "flex";
+        }
+    </script>
+</body>
+</html>
